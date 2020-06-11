@@ -1,5 +1,5 @@
 import data
-from math import ceil
+from math import ceil, floor
 
 class chapter:
     """[summary]
@@ -51,7 +51,7 @@ def getDaysAyah(numberOfDays, startSurah, endSurah=0):
     return (dailyAyahGoal)
 
 
-def getDaysPages(numberOfDays, startSurah, endSurah=1):
+def getDaysPages(numberOfDays, startSurah, endSurah=1, precision=0):
     """[summary]
 
     Args:
@@ -66,28 +66,20 @@ def getDaysPages(numberOfDays, startSurah, endSurah=1):
     pageGoal = 0
     dailyPageGoal = 0
     day = 1
-    surahFinishDay = {}
-    for i in (chaptersToLearn):
+    numPagesTillSurah = {}
+    for i in reversed(chaptersToLearn):
         pageGoal = pageGoal + i.numberOfPages
+        numPagesTillSurah[i.name] = pageGoal
 
-    dailyPageGoal = ceil(pageGoal/numberOfDays)
+    dailyPageGoal = round(pageGoal/numberOfDays,precision)
+    surahFinishDay = {}
+    for i in reversed(chaptersToLearn):
+        if(numPagesTillSurah[i.name] % dailyPageGoal > .2):
+            surahFinishDay[i.name] = ceil(numPagesTillSurah[i.name]/dailyPageGoal)
+        else:
+            surahFinishDay[i.name] = floor(numPagesTillSurah[i.name]/dailyPageGoal)
 
-    dailySurah = []
-    for surah in reversed(chaptersToLearn):
-        learnSoFar += surah.numberOfPages
-        dailySurah.append(surah)
-        if (learnSoFar>dailyPageGoal):
-            if (abs(learnSoFar-dailyPageGoal <0.25)):
-                surahFinishDay[day] = dailySurah
-            elif (abs(learnSoFar-dailyPageGoal >=0.25)):
-                surahFinishDay[day] = dailySurah[:-1]
-
-            learnSoFar = 0
-            day+=1
-            togo = dailySurah[len(dailySurah)-1]
-            dailySurah = []
-            dailySurah.append(togo)
-    sortedDict = sorted(surahFinishDay)
-    returnValue = [dailyPageGoal, surahFinishDay]
-    return (returnValue)
+    surahFinishDayS = sorted(surahFinishDay)
+    returnValue = [dailyPageGoal, surahFinishDay, chaptersToLearn]
+    return  returnValue
 
