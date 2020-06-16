@@ -1,7 +1,7 @@
 import data
 from math import ceil, floor
 
-class chapter:
+class Chapter:
     """[summary]
     """
     def __init__(self, name, chapterNum, numberOfAyahs, numberOfPages):
