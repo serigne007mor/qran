@@ -61,10 +61,18 @@ def sendemail(receiver, calendar):
     if __name__ == '__main__':
         main()
 
-
+result = open("templates/surahList.html", "w")
+result.write("")
+result = open("templates/prediction.html", "w")
+result.write("")
 
 @app.route("/")
 def main():
+    result = open("templates/surahList.html", "w")
+    result.write("")
+    result = open("templates/prediction.html", "w")
+    result.write("")
+    print("HEEERRRREEEE")
     return render_template("index.html")
 
 @app.route("/", methods=["POST"])
@@ -104,7 +112,6 @@ def surah():
     sendemail(email, ics)
     os.remove(ics)
     # os.remove(txt)
-    result.write(utils.createButton())
     return redirect(url_for('surahList'))
     # return render_template("index.html")
 
