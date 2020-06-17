@@ -23,5 +23,3 @@ for surah in surahList:
     totalAyahs = totalAyahs + surah.get("numberOfAyahs")
     currShapter = Chapter(surah.get("englishName"), surah.get("number"), surah.get("numberOfAyahs"), surah.get("numberOfPages"))
     allChapters.append(currShapter)
-
-# print(allChapters[0])

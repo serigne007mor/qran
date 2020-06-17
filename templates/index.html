@@ -21,6 +21,20 @@
         <form class="form-horizontal" id="form" method="post">
 
             <div class="form-group">
+                <label class="control-label col-sm-4">Begin From Surah</label>
+                <div class="col-sm-8">
+                    <input type="number" min="1" max="114" class="form-control" id="beginSurah" name="beginSurah" placeholder="Enter your current surah number" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">Stop at Surah</label>
+                <div class="col-sm-8">
+                    <input type="number" min="1" max="114" class="form-control" id="endSurah" name="endSurah" placeholder="Enter surah number you want to stop (1 for Baqara)" required>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="control-label col-sm-4">Begin Date</label>
                 <div class="col-sm-8">
                     <input type="date" class="form-control" id="beginDate" name="beginDate" required>
@@ -66,11 +80,15 @@
         var endDate = $("#endDate").val();
         var precision = $("#precision").val();
         var email = $("#precision").val();
+        var beginSurah = $("#beginSurah").val();
+        var endSurah = $("endSurah").val();
         var form_data = new FormData();
         form_data.append('beginDate', beginDate);
         form_data.append('endDate', endDate);
         form_data.append('precision', precision);
         form_data.append('email', email);
+        form_data.append('beginSurah', beginSurah);
+        form_data.append('endSurah', endSurah);
     });
 </script>
 

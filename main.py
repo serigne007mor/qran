@@ -1,21 +1,22 @@
 from ics import Calendar, Event
 from flask import Flask, render_template, request
-from _datetime import date, timedelta
-import utils
-from flask.helpers import send_file, send_from_directory
+from flask.helpers import send_file, send_from_directory, url_for
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 import sys
 import os
+import datetime
+import utils
+from werkzeug.utils import redirect
 app = Flask(__name__)
 
 def sendemail(receiver, calendar):
     COMMASPACE = ', '
     def main():
-        sender = 'mcrwv1990@gmail.com'
-        gmail_password = 'Gelorsel1'
+        sender = 'tourefamily161@gmail.com'
+        gmail_password = 'Be@tslapsit090400'
         recipients = [str(receiver)]
 
         # Create the enclosing (outer) message
@@ -66,27 +67,31 @@ def sendemail(receiver, calendar):
 def main():
     return render_template("index.html")
 
-
 @app.route("/", methods=["POST"])
-def Create():
-    result = open("calendar.txt", "w")
+def surah():
+    result = open("templates/surahList.html", "w")
+    result.write(utils.getHeader())
     beginDateForm = request.form['beginDate']
     endDateForm = request.form['endDate']
-    precision = request.form['precision']
+    precision = int(request.form['precision'])
     email = request.form['email']
+    beginSurah = int(request.form['beginSurah'])
+    endSurah = int(request.form['endSurah'])
     beginDateForm = beginDateForm.split("-")
     endDateForm = endDateForm.split("-")
-    beginDate = date(int(beginDateForm[0]), int(beginDateForm[1]), int(beginDateForm[2]))
-    endDate = date(int(endDateForm[0]), int(endDateForm[1]), int(endDateForm[2]))
-    numberOfDays = utils.diff_dates(endDate, beginDate)
-    returnValue = utils.getDaysPages(numberOfDays, 114, 1)
+    beginDate = datetime.date(int(beginDateForm[0]), int(beginDateForm[1]), int(beginDateForm[2]))
+    endDate = datetime.date(int(endDateForm[0]), int(endDateForm[1]), int(endDateForm[2]))
+    numberOfDays = utils.diff_dates(beginDate, endDate)
+    returnValue = utils.getDaysPages(numberOfDays, beginSurah, endSurah, precision)
     dailyPageGoal = returnValue[0]
     surahFinishDay = returnValue[1]
     chaptersToLearn = returnValue[2]
     c = Calendar()
+    result.write("<script type=\"text/javascript\">alert(\"Your calendar was sent to "+email+" \");</script>  ")
+    result.write("<h2> You will have to learn "+str(dailyPageGoal)+" pages per day</h2>\n")
     for i in reversed(chaptersToLearn):
-        finishDay =  beginDate+ timedelta(days=surahFinishDay[i.name])
-        result.write(i.name+ " Will be done on "+str(finishDay)+"\n")
+        finishDay =  beginDate+ datetime.timedelta(days=surahFinishDay[i.name])
+        result.write("<p>"+i.name+ " Will be done on "+str(finishDay)+"</p>")
         e = Event()
         e.name = "Finish "  + i.name
         e.begin = str(finishDay)+" 00:00:00"
@@ -96,14 +101,47 @@ def Create():
     with open('calendar.ics', 'w') as f:
         f.write(str(c))
     ics = '/Users/serigne/Desktop/dev/project/python/qran/calendar.ics'
-    # txt = '/Users/serigne/Desktop/dev/project/python/qran/calendar.txt'
     sendemail(email, ics)
     os.remove(ics)
     # os.remove(txt)
-    return render_template("index.html")
+    result.write(utils.createButton())
+    return redirect(url_for('surahList'))
+    # return render_template("index.html")
+
+
+@app.route("/surahList")
+def surahListMain():
+    # result.write("<script type=\"text/javascript\">alert(\"Your calendar was sent to your email\");</script>  ")
+    return render_template("surahList.html")
+
+@app.route("/surahList", methods=["POST"])
+def surahList():
+    return redirect(url_for('main'))
+    # return render_template("surahLists.html")
+
+
+
+
+
+
+@app.route("/prediction")
+def prediction():
+    return render_template("prediction.html")
 
 @app.route("/result")
-def result():
-    return render_template("result.html")
+def predictionResult():
+    return render_template("when.html")
+
+@app.route("/prediction", methods=["POST"])
+def prediction2():
+    currentSurah = request.form['currentSurah']
+    numAyah = int(request.form['numAyah'])
+    result = open("templates/when.html", "w")
+    x = datetime.date.today
+    result.write("<script type=\"text/javascript\">alert(\"Data received\");</script>  ")
+    return redirect(url_for('p2'))
+
+
+
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8090, debug=True)

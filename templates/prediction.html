@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Qran Calculator</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container" id="formtest">
+        <h1 align="center">Qran calculator</h1><br><br>
+
+        <div class="alert alert-success" id="alert" hidden>
+            <strong>Success!</strong>
+        </div>
+
+        <form class="form-horizontal" id="form" method="post">
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">Begin From Surah</label>
+                <div class="col-sm-8">
+                    <input type="number" min="1" max="114" class="form-control" id="currentSurah" name="currentSurah" placeholder="Enter your current surah number" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">Number of ayah per day</label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" id="numAyah" name="numAyah" required>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="col-sm-12" align="center">
+                    <button type="submit" class="btn btn-primary" name="submit" id="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    $("#submit").click(function() {
+        $(".form1").submit();
+        var currentSurah = $("#currentSurah").val();
+        var numAyah = $("#numAyah").val();
+        var form_data = new FormData();
+        form_data.append('currentSurah', currentSurah);
+        form_data.append('numAyah', numAyah);
+
+    });
+</script>
+
+</html>
