@@ -72,7 +72,6 @@ def main():
     result.write("")
     result = open("templates/prediction.html", "w")
     result.write("")
-    print("HEEERRRREEEE")
     return render_template("index.html")
 
 @app.route("/", methods=["POST"])
